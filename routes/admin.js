@@ -260,6 +260,19 @@ router.post("/edit-security-code",verifyLogin, (req, res) => {
   })
 });
 
+router.get("/view-security-code", verifyLogin,(req, res) => {
+  productHelpers.getSecurityCode().then((response) => {
+    res.render(`${variable.admin_router}/viewSecurityCode`, {
+      admin,
+      Admin: req.session.admin,
+      MESSAGE: req.session.MESSAGE,
+      response
+    })
+    req.session.MESSAGE = null
+  })
+});
+
+
 //  --------------------------------------------------------------------------------
 // | *************************************EDIT************************************* |
 //  --------------------------------------------------------------------------------
@@ -269,6 +282,7 @@ router.get("/edit-category/:id/:name", verifyLogin_or_teacher, async (req, res) 
   let id = req.session.Category_Id = req.params.id         // null
   let category = await productHelpers.getCategoryDetails(req.params.id);
   let Admin = req.session.admin;
+  console.log(category,'category');
   let Response_For_Edit_Category = req.session.Response_For_Edit_Category
   res.render(`${variable.admin_router}/edit-category`, {
     category,
@@ -325,6 +339,17 @@ router.get("/edit-profile", verifyLogin, (req, res) => {
     req.session.Response_For_Edit_Profile = null
   });
 });
+
+
+router.get("/view-profile", verifyLogin, (req, res) => {
+  let Admin = req.session.admin;
+  let Edit_Response = req.session.Response_For_Edit_Profile
+  productHelpers.getAdminData(req.session.admin._id).then((data) => {
+    res.render(`${variable.admin_router}/view-profile`, { admin, data, Admin, Edit_Response });
+    req.session.Response_For_Edit_Profile = null
+  });
+});
+
 //----------POST-EDIT-PROFILE----------//
 router.post("/edit-profile", verifyLogin, async (req, res) => {
   req.session.Edit_Profile_Data_For_Input = req.body;
@@ -375,7 +400,155 @@ router.post("/verifyPass", verifyLogin, (req, res) => {
 
 
 
+router.get("/edit-doncategory/:id/:name", verifyLogin_or_teacher, async (req, res) => {
+  let name = req.session.Category_Name = req.params.name   // null
+  let id = req.session.Category_Id = req.params.id         // null
+  let category = await productHelpers.getDonationOneCategoryData(req.params.id);
+  let Admin = req.session.admin;
+  console.log(category,'category');
+  let Response_For_Edit_Category = req.session.Response_For_Edit_Category
+  res.render(`${variable.admin_router}/edit-doncategory`, {
+    category,
+    admin,
+    Admin,
+    name,
+    Response_For_Edit_Category,
+  });
+  req.session.Response_For_Edit_Category = null
+});
+//----------POST-EDIT-CATEGORY----------//
+router.post("/edit-doncategory/:id", verifyLogin, (req, res) => {
+  console.log(req.body);
+  let CheckWhiteSpace = req.body.name;
+  let id = req.params.id;
+  let trimStr = CheckWhiteSpace.trim();
+  let Name_For_RedDiR = req.session.Category_Name
+  if (req.body.name === '') {
+    req.session.Response_For_Edit_Category =
+    {
+      message: 'Name null',
+      status: false
+    }
+    res.redirect(`/${variable.admin_router}/edit-doncategory/${id}/${Name_For_RedDiR}`);
+  } else {
+    productHelpers.updateDonCategory(req.params.id, req.body, trimStr).then((response) => {
+      req.session.Category_Name = trimStr
+      if (req.files) {
+        let image = req.files.image;
+        image.mv("./public/category-images/" + id + ".jpg");
+        req.session.Response_For_Edit_Category =
+        {
+          message: 'Successfully updated',
+          status: true
+        }
+        res.redirect(`/${variable.admin_router}/edit-doncategory/${id}/${trimStr}`);
+      } else {
+        req.session.Response_For_Edit_Category =
+        {
+          message: 'Successfully updated',
+          status: true
+        }
+        res.redirect(`/${variable.admin_router}/edit-doncategory/${id}/${trimStr}`);
+      }
+    });
+  }
+});
 
+
+
+// Donation view categories
+
+// view-donationcategories
+
+router.get("/view-donationcategories", verifyLogin, (req, res) => {
+  let Admin = req.session.admin;
+  let Edit_Response = req.session.Response_For_Edit_Profile
+  productHelpers.getDonationCategoryData().then((data) => {
+    console.log(data);
+    res.render(`${variable.admin_router}/view-donationcategories`, { admin, data, Admin, Edit_Response });
+    req.session.Response_For_Edit_Profile = null
+  });
+});
+
+
+
+router.delete("/delete-doncategory", (req, res) => {
+  // let Admin = req.session.admin;
+  // let Edit_Response = req.session.Response_For_Edit_Profile
+  productHelpers.deleteDontion(req.body.id).then((data) => {
+    console.log(data);
+    res.json({status:true})
+    // req.session.Response_For_Edit_Profile = null
+  });
+});
+
+
+// add-donationcategories
+
+
+
+router.get("/add-donationcategories", verifyLogin, (req, res) => {
+  let Admin = req.session.admin;
+  let Response_For_AddCategories = req.session.Response_For_AddCategories
+  productHelpers.getAdminData(req.session.admin._id).then((data) => {
+    res.render(`${variable.admin_router}/add-donationcategories`, { admin, data, Admin, Response_For_AddCategories });
+    req.session.Response_For_AddCategories = null
+  });
+});
+
+
+
+router.post("/add-donationcategories", verifyLogin_or_teacher, (req, res) => {
+  console.log(req.body);
+  if (req.body.name === '') {
+    req.session.Response_For_AddCategories =
+    {
+      message: 'Empty value',
+      status: false
+    }
+    res.redirect(`/${variable.admin_router}/add-donationcategories`);
+  } else {
+    let CheckWhiteSpace = req.body.name;
+    let trimStr = CheckWhiteSpace.trim();
+    productHelpers.AddDonationCategories(req.body, trimStr, (response) => {
+      if (response.status) {
+        if (req.files) {
+          let image = req.files.image;
+          image.mv("./public/category-images/" + response.inserted_Id + ".jpg", (err) => {
+            if (!err) {
+              req.session.Response_For_AddCategories =
+              {
+                message: 'Successfully submitted',
+                status: true
+              }
+              res.redirect(`/${variable.admin_router}/add-donationcategories`);
+            } else {
+              req.session.Response_For_AddCategories =
+              {
+                message: 'Error image (' + err + ')',
+                status: false
+              }
+            }
+          });
+        } else {
+          req.session.Response_For_AddCategories =
+          {
+            message: 'Successfully submitted',
+            status: true
+          }
+          res.redirect(`/${variable.admin_router}/add-donationcategories`);
+        }
+      } else {
+        req.session.Response_For_AddCategories =
+        {
+          message: response.message,
+          status: false
+        };
+        res.redirect(`/${variable.admin_router}/add-donationcategories`);
+      }
+    });
+  }
+});
 
 
 

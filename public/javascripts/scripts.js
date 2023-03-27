@@ -69,6 +69,83 @@ $(document).ready(function () {
       // },
     },
   });
+
+
+
+
+  $("#editOrphanage").validate({
+    rules: {
+      name: {
+        required: true,
+      },
+
+      description: {
+        required: true,
+      },
+      contact:{
+        required:true,
+      },
+
+    },
+    messages: {
+      name: {
+        required: "Enter your Full Name",
+        minlength: "Minimum 4 characters",
+        maxlength: "Please enter no more than 36 characters.",
+      },
+      password: {
+        required: "Please enter a password",
+        minlength: "Password minimum 6 character.",
+        maxlength: "Please enter no more than 16 characters.",
+      },
+      //   confirm_password: {
+      //       required: "Please enter a password",
+      //       minlength: "Password minimum 6 characters",
+      //       equalTo: "Please enter the same password as above."
+      //   },
+      email: {
+        required: "Enter your Email",
+      },
+      // agree: {
+      //   required: "You must agree with our Terms and Conditions",
+      // },
+    },
+  });
+
+  $("#addOrphanage").validate({
+    rules: {
+      name: {
+        required: true,
+      },
+
+      
+      image: {
+        required: true,
+
+      },
+      
+      description: {
+        required: true,
+
+      },
+      contact:{
+        required:true
+      }
+    },
+
+  });
+
+
+
+
+
+
+
+
+
+
+
+
   $("#editProfile").validate({
     rules: {
       name: {
@@ -157,6 +234,29 @@ $(document).ready(function () {
   $("#subcategory").DataTable();
   
 });
+
+
+function deleteDonationCat(id, name) {
+  let cfm = confirm("Are you want to delete " + name);
+  if (cfm) {
+    $.ajax({
+      url: "/admin/delete-doncategory/",
+      method: "delete",
+      data: {
+        id: id,
+      },
+      success: (response) => {
+        if (response.status) {
+          location.reload();
+        } else {
+          location.reload();
+        }
+      },
+    });
+  } else {
+  }
+}
+
 
 function deleteCat(id, name) {
   let cfm = confirm("Are you want to delete " + name);

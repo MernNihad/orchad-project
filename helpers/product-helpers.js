@@ -17,6 +17,8 @@ module.exports = {
             var dateTime = date + ' ' + time;
             let obj = {
                 name: dash,
+                description:data.description,
+                contact:data.contact,
                 date: dateTime
             }
             db.get().collection(collection.CATEGORY_COLLECTION).insertOne(obj).then((data) => {
@@ -36,6 +38,42 @@ module.exports = {
         }
 
     },
+
+    
+
+    AddDonationCategories: async (data, dash, callback) => {
+        let result = await db.get().collection(collection.DONATION_CATEGORY_COLLECTION).findOne({ name: dash })
+        if (result == null) {
+            let getData
+            var today = new Date();
+            var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+            var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            var dateTime = date + ' ' + time;
+            let obj = {
+                name: dash,
+                description:data.description,
+                amount:data.amount,
+                date: dateTime
+            }
+            db.get().collection(collection.DONATION_CATEGORY_COLLECTION).insertOne(obj).then((data) => {
+                getData =
+                {
+                    inserted_Id: data.insertedId,
+                    status: true
+                }
+                callback(getData)
+            })
+        } else {
+            getData = {
+                message: 'This name is already available',
+                status: false
+            }
+            callback(getData)
+        }
+
+    },
+
+
     getAllCategories: () => {
         return new Promise(async (resolve, reject) => {
             let categories = await db.get().collection(collection.CATEGORY_COLLECTION).find().toArray()
@@ -46,6 +84,27 @@ module.exports = {
             resolve(obj)
         })
     },
+
+    
+
+    getDonationCategoryData: () => {
+        return new Promise(async (resolve, reject) => {
+            let categories = await db.get().collection(collection.DONATION_CATEGORY_COLLECTION).find().toArray()
+            obj = {
+                categories,
+                length: categories.length
+            }
+            resolve(obj)
+        })
+    },
+
+    getDonationOneCategoryData: (id) => {
+        return new Promise(async (resolve, reject) => {
+            let categories = await db.get().collection(collection.DONATION_CATEGORY_COLLECTION).findOne({_id:objectId(id)})
+            resolve(categories)
+        })
+    },
+    
 
     getTeacher: () => {
         return new Promise(async (resolve, reject) => {
@@ -139,6 +198,17 @@ module.exports = {
             })
         })
     },
+
+    deleteDontion: (categoryID) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.DONATION_CATEGORY_COLLECTION).deleteOne({ _id: objectId(categoryID) }).then((response) => {
+                // db.get().collection(collection.SUBCATEGORY_COLLECTION).deleteMany({ category: objectId(categoryID) }).then((response) => {
+                    resolve(response)
+                // })
+            })
+        })
+    },
+
 
     deleteTeacher: (categoryID) => {
         return new Promise((resolve, reject) => {
@@ -287,6 +357,42 @@ module.exports = {
             db.get().collection(collection.CATEGORY_COLLECTION).updateOne({ _id: objectId(CategoryID) }, {
                 $set: {
                     name: name,
+                    description:CategoryDetails.description,
+                    contact:CategoryDetails.contact,
+                    date: dateTime,
+                }
+            }).then((response) => {
+                obj = {
+                    status: true,
+                    response
+                }
+                resolve(obj)
+            })
+        })
+    },
+
+
+    updateDonCategory: (CategoryID, CategoryDetails, name) => {
+        return new Promise(async (resolve, reject) => {
+            let obj
+            let result = await db.get().collection(collection.DONATION_CATEGORY_COLLECTION).findOne({ name: name })
+            if (result) {
+                obj = {
+                    status: false,
+                    response: null
+                }
+                resolve(obj)
+            }
+            var today = new Date();
+            var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+            var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            var dateTime = date + ' ' + time;
+
+            db.get().collection(collection.DONATION_CATEGORY_COLLECTION).updateOne({ _id: objectId(CategoryID) }, {
+                $set: {
+                    name: name,
+                    description:CategoryDetails.description,
+                    amount:CategoryDetails.amount,
                     date: dateTime,
                 }
             }).then((response) => {

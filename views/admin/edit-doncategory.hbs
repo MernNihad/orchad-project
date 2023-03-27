@@ -9,7 +9,7 @@
         {{/if}}
         <div class="d-flex flex-row justify-content-between">
             <div class="">
-                <form action="/admin/edit-category/{{category._id}}" method="post" enctype="multipart/form-data" id="editOrphanage">
+                <form action="/admin/edit-doncategory/{{category._id}}" method="post" enctype="multipart/form-data" id="editOrphanage">
                     <div class="row add-SubCatLeftUI  mt-4">
                         {{#if Response_For_Edit_Category}}
                         {{#if Response_For_Edit_Category.status}}
@@ -37,8 +37,8 @@
                             <input type="text" placeholder="Description" class="form-control" name="description" value="{{category.description}}" />
                         </div>
                             <div class="col-12">
-                            <label>Contact<span class="text-danger">*</span></label>
-                            <input type="text" placeholder="Contact" class="form-control" name="contact" value="{{category.contact}}" />
+                            <label>Amount<span class="text-danger">*</span></label>
+                            <input type="text" placeholder="Amount" class="form-control" name="amount" value="{{category.amount}}" />
                         </div>
                            
 
