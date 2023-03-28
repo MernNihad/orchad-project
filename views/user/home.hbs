@@ -1,19 +1,25 @@
-<section id="home-section">
-  <div class="container" id="container">
-    <div class="row home-row" id="results">
+<section id="home-section" style="">
+  {{!-- <div class="container" id="container"> --}}
+    <div class="row home-row ml-1" id="results">
       {{#if response}}
       {{#each response.data}}
-      <div onclick="viewDisplay('/viewExplore/{{this._id}}')" class="card m-3" style="width: 12rem;">
-        <img class="card-img-top" src="/category-images/{{this._id}}.jpg" alt="Card image cap" />
+   
+   <div class="" onclick="url('/getCollection/donation/{{this._id}}')" style="    border: 3px solid #bbb5b5;">
+       <div class="card m-1" style="width: 22rem;position:relative">
+        <img class="card-img-top" style="height: 235px;" src="/category-images/{{this._id}}.jpg" alt="Card image cap" />
+        <h5 style="    position: absolute;border: 0p;bottom: 0px;font-size: 22px;font-weight: 700;width: 100%;text-align: center;">{{this.name}}</h5>
       </div>
+   </div>
+
       {{/each}}
       {{else}}
       <div>
         <p class="loading" style="font-family: 'Avenir', sans-serif ;">Loading...</p>
       </div>
       {{/if}}
+
     </div>
-  </div>
+  {{!-- </div> --}}
 </section>
 
 <div onclick="topFunction()" id="home_btn"><i class="fa-sharp fa-solid fa-arrow-up"></i></div>

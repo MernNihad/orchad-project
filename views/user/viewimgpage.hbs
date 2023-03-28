@@ -1,0 +1,27 @@
+<h1>addd image</h1>
+
+{{#if MESSAGE }}
+                        {{#if MESSAGE.status}}
+                        <div class="alert alert-success" role="alert">
+                            {{MESSAGE.message}}
+                        </div>
+                        {{else}}
+                            <div class="alert alert-danger" role="alert">
+                                {{MESSAGE.message}}
+                            </div>
+                        {{/if}}
+                        {{/if}}
+
+
+
+
+<form action="/uploadimage" enctype="multipart/form-data" method="post" >
+
+ <img class="m-4" src="" alt="" width="65px" height="50px" id="imgViewSubCat">
+<input onchange="viewImageSubCategory(event)" type="file" name="image" >
+
+                            
+
+<textarea name="address" id="" cols="30" rows="10" placeholder="address"></textarea>
+<input type="submit" value="Submit">
+</form>

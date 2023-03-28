@@ -1,5 +1,6 @@
 const { response } = require("express");
 var express = require("express");
+const collections = require("../config/collections");
 const variables = require("../config/variables");
 const productHelpers = require("../helpers/product-helpers");
 const userHelpers = require("../helpers/user-helpers");
@@ -19,6 +20,11 @@ const verifyLogin = (req, res, next) => {
 //----------HOME-PAGE----------//
 router.get("/", async function (req, res, next) {
   res.redirect('/home')
+});
+
+router.get("/about", async function (req, res, next) {
+  res.render('user/about',{user_header,
+    userData: req.session.user,})
 });
 
 router.get("/explore", async function (req, res, next) {
@@ -50,10 +56,9 @@ router.get("/clearScore", async function (req, res, next) {
 });
 //----------HOME-PAGE----------//
 router.get('/home', verifyLogin, async (req, res) => {
-  // let total_score =await userHelpers.getScore()
-  // total_score = total_score[0]
-  userHelpers.AllCatagories().then((response) => {
+  userHelpers.AllDonationCatagories().then((response) => {
     if (response.status) {
+      console.log(response);
       res.render("user/home", {
         user_header,
         userData: req.session.user,
@@ -118,125 +123,188 @@ router.get("/logout", (req, res) => {
   res.redirect("/login");
 });
 //----------GET-SUBCATEGORIES----------//
-router.get('/viewExplore/:id', verifyLogin, (req, res) => {
-  res.render('user/chooseTypeOfQstn', {
-    user_header,
-    id: req.params.id,
-    userData: req.session.user,
-  })
+router.get('/getCollection/:url_end/:id', (req, res) => {
+  req.session.ID_STORE = req.params.id
+  req.session.URL_END_STORE = req.params.url_end 
+
+    if(req.params.url_end==='donation'){
+
+      userHelpers.getCollectionForUpdateOne(req.params.id,collections.DONATION_CATEGORY_COLLECTION).then((response)=>{
+        console.log(response,'resss');
+        res.render('user/donationFpage', {
+      user_header,
+      id: req.params.id,
+      response,
+      userData: req.session.user,})
+    })
+    
+  }
+
+    if(req.params.url_end==='orphanage'){
+      userHelpers.getCollectionForUpdateOne(req.params.id,collections.CATEGORY_COLLECTION).then((response)=>{
+        console.log(response,'resss');
+        res.render('user/orphanage', {
+            user_header,
+            // id: req.params.id,
+            response,
+            userData: req.session.user,})
+        })
+      }
+  // // //   //     
+  // // userHelpers.getCollectionForUpdateOne(req.params.id).then((response)=>{
+  // //   console.log(response,'response');
+  // })
+  console.log(req.params.id);
+  console.log(req.body.donationCollectionID);// })
+  console.log(req.params.url_end);
 })
 // -----------
-router.get('/view/:qstn_type/:id', verifyLogin, (req, res) => {
-  userHelpers.getQuestionForAtten(req.params.id, req.params.qstn_type).then((response) => {
-    let id_for_question = req.params.id
-    let question_type_for_question = req.params.qstn_type
-    res.render('user/viewQstn', {
-      user_header,
-      value: response,
-      id_for_question,
-      question_type_for_question,
-      userData: req.session.user,
-    })
+router.get('/donationForm', verifyLogin, (req, res) => {
+  res.render('user/donationForm', {
+    user_header,
+    userData: req.session.user,
+    MESSAGE:req.session.MESSAGE
+  })
+  req.session.MESSAGE = null
+})
+
+router.post('/donationForm', verifyLogin, (req, res) => {
+  userHelpers.addUsersDonation(req.session.user._id,req.body).then((response)=>{
+    req.session.MESSAGE = {
+      message:'inserted',
+      status:true
+    }
+      res.redirect('/donationForm')
   })
 })
 
-router.get('/viewQuestion/:id', verifyLogin, (req, res) => {
-  userHelpers.getQuestionForAttenOne(req.params.id).then((response) => {
-    req.session.TEMPORARY_VALUE_ONE = req.params.id
-    if (response.typeOfQst === 'mcq_type') {
-      res.render('user/viewQstnForOne', {
+router.get('/orphanages/', verifyLogin, (req, res) => {
+  userHelpers.getOrphanages().then((response) => {
+    console.log(response);
+    res.render('user/viewOrphanage', {
         user_header,
-        value: response,
+        response,
         userData: req.session.user,
         MESSAGE: req.session.MESSAGE,
-        MCQ: true,
       })
-    } else if (response.typeOfQst === 'true_or_false_type') {
-      res.render('user/viewQstnForOne', {
-        user_header,
-        value: response,
-        userData: req.session.user,
-        MESSAGE: req.session.MESSAGE,
-        TRUE_FALSE: true,
-      })
-    }
-    if (response.typeOfQst === 'type_question_type') {
-      res.render('user/viewQstnForOne', {
-        user_header,
-        value: response,
-        userData: req.session.user,
-        MESSAGE: req.session.MESSAGE,
-        TYPE_QUESTION: true,
-      })
-    }
-    req.session.MESSAGE = null
+    //   if (response.typeOfQst === 'mcq_type') {
+    // } else if (response.typeOfQst === 'true_or_false_type') {
+    //   res.render('user/viewQstnForOne', {
+    //     user_header,
+    //     value: response,
+    //     userData: req.session.user,
+    //     MESSAGE: req.session.MESSAGE,
+    //     TRUE_FALSE: true,
+    //   })
+    // }
+    // if (response.typeOfQst === 'type_question_type') {
+    //   res.render('user/viewQstnForOne', {
+    //     user_header,
+    //     value: response,
+    //     userData: req.session.user,
+    //     MESSAGE: req.session.MESSAGE,
+    //     TYPE_QUESTION: true,
+      // })
+    // }
+    // req.session.MESSAGE = null
   })
 })
-//----------post-anser----------//
-router.post('/question_answer', verifyLogin, (req, res) => {
-  userHelpers.getQuestionForAttenOne(req.body._id).then((response) => {
-    if (response.typeOfQst === 'mcq_type') {
-      let answer = response.answer
-      if (response[answer] === req.body.__answer_select_user) {
-        let score = 1
-        userHelpers.addAnswerCollectionForUsers(req.session.user._id, score, req.body._id).then((response) => {
-          req.session.MESSAGE = {
-            message: 'Correct',
-            status: true
-          }
-          res.redirect(`/viewQuestion/${req.session.TEMPORARY_VALUE_ONE}`);
-        }).catch(() => {
-          req.session.MESSAGE = {
-            message: 'Error',
-            status: false
-          }
-          res.redirect(`/viewQuestion/${req.session.TEMPORARY_VALUE_ONE}`);
-        })
-      } else {
-        req.session.MESSAGE = {
-          message: 'Wrong answer',
-          status: false
-        }
-        res.redirect(`/viewQuestion/${req.session.TEMPORARY_VALUE_ONE}`);
-      }
-    } else if (response.typeOfQst === 'true_or_false_type') {
-      if (response.answer === req.body.__answer_select_user) {
-        let score = 1
-        userHelpers.addAnswerCollectionForUsers(req.session.user._id, score, req.body._id).then(() => {
-          req.session.MESSAGE = {
-            message: 'Correct',
-            status: true
-          }
-          res.redirect(`/viewQuestion/${req.session.TEMPORARY_VALUE_ONE}`);
-        }).catch(() => {
-          req.session.MESSAGE = {
-            message: 'Error',
-            status: false
-          }
-          res.redirect(`/viewQuestion/${req.session.TEMPORARY_VALUE_ONE}`);
-        })
-      } else {
-        req.session.MESSAGE = {
-          message: 'Wrong answer',
-          status: false
-        }
-        res.redirect(`/viewQuestion/${req.session.TEMPORARY_VALUE_ONE}`);
-      }
-    } else if (response.typeOfQst === 'type_question_type') {
-      userHelpers.addAnswerCollectionForUsers(req.session.user._id, score = 0, req.body._id, type_answe = true, req.body.__answer_select_user, response.typeOfQst).then(() => {
-        req.session.MESSAGE = {
-          message: 'Submited ',
-          status: true
-        }
-        res.redirect(`/viewQuestion/${req.session.TEMPORARY_VALUE_ONE}`);
-      }).catch(() => {
-        req.session.MESSAGE = {
-          message: 'Error ',
-          status: false
-        }
-        res.redirect(`/viewQuestion/${req.session.TEMPORARY_VALUE_ONE}`);
-      })
+
+
+
+router.get('/addimage', verifyLogin, (req, res) => {
+  res.render('user/viewimgpage', {
+    user_header,
+    // response,
+    MESSAGE:req.session.MESSAGE,
+    userData: req.session.user,
+    // MESSAGE: req.session.MESSAGE,
+  })
+  req.session.MESSAGE = null
+})
+
+router.post('/uploadimage', verifyLogin, (req, res) => {
+  console.log(req.body);
+  console.log(req.files);
+  userHelpers.addImageAndAddress(req.body).then((response)=>{
+    console.log(response);
+    if(req.files.image){
+      req.files.image.mv('public/user_images/'+response+'.jpg')
     }
+    req.session.MESSAGE = {
+      message:'inserted',
+      status:true
+    }
+    res.redirect(`/addimage`)
   })
 })
+
+
+// //----------post-anser----------//
+// router.post('/question_answer', verifyLogin, (req, res) => {
+//   userHelpers.getQuestionForAttenOne(req.body._id).then((response) => {
+//     if (response.typeOfQst === 'mcq_type') {
+//       let answer = response.answer
+//       if (response[answer] === req.body.__answer_select_user) {
+//         let score = 1
+//         userHelpers.addAnswerCollectionForUsers(req.session.user._id, score, req.body._id).then((response) => {
+//           req.session.MESSAGE = {
+//             message: 'Correct',
+//             status: true
+//           }
+//           res.redirect(`/viewQuestion/${req.session.TEMPORARY_VALUE_ONE}`);
+//         }).catch(() => {
+//           req.session.MESSAGE = {
+//             message: 'Error',
+//             status: false
+//           }
+//           res.redirect(`/viewQuestion/${req.session.TEMPORARY_VALUE_ONE}`);
+//         })
+//       } else {
+//         req.session.MESSAGE = {
+//           message: 'Wrong answer',
+//           status: false
+//         }
+//         res.redirect(`/viewQuestion/${req.session.TEMPORARY_VALUE_ONE}`);
+//       }
+//     } else if (response.typeOfQst === 'true_or_false_type') {
+//       if (response.answer === req.body.__answer_select_user) {
+//         let score = 1
+//         userHelpers.addAnswerCollectionForUsers(req.session.user._id, score, req.body._id).then(() => {
+//           req.session.MESSAGE = {
+//             message: 'Correct',
+//             status: true
+//           }
+//           res.redirect(`/viewQuestion/${req.session.TEMPORARY_VALUE_ONE}`);
+//         }).catch(() => {
+//           req.session.MESSAGE = {
+//             message: 'Error',
+//             status: false
+//           }
+//           res.redirect(`/viewQuestion/${req.session.TEMPORARY_VALUE_ONE}`);
+//         })
+//       } else {
+//         req.session.MESSAGE = {
+//           message: 'Wrong answer',
+//           status: false
+//         }
+//         res.redirect(`/viewQuestion/${req.session.TEMPORARY_VALUE_ONE}`);
+//       }
+//     } else if (response.typeOfQst === 'type_question_type') {
+//       userHelpers.addAnswerCollectionForUsers(req.session.user._id, score = 0, req.body._id, type_answe = true, req.body.__answer_select_user, response.typeOfQst).then(() => {
+//         req.session.MESSAGE = {
+//           message: 'Submited ',
+//           status: true
+//         }
+//         res.redirect(`/viewQuestion/${req.session.TEMPORARY_VALUE_ONE}`);
+//       }).catch(() => {
+//         req.session.MESSAGE = {
+//           message: 'Error ',
+//           status: false
+//         }
+//         res.redirect(`/viewQuestion/${req.session.TEMPORARY_VALUE_ONE}`);
+//       })
+//     }
+//   })
+// })
 module.exports = router;

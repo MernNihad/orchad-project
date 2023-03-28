@@ -17,7 +17,8 @@ module.exports = {
         name: userData.name,
         email: userData.email,
         date: dateTime,
-        password: userData.password
+        password: userData.password,
+        address:userData.address,
       }
       db.get().collection(collection.USER_COLLECTION).findOne({ email: objData.email }).then(async (response) => {
         if (response == null) {
@@ -63,89 +64,109 @@ module.exports = {
       }
     });
   },
-  getQuestionForAtten: (CateId,type) => {
-    console.log(CateId,type);
+  getOrphanages: () => {
+    
     return new Promise(async (resolve, reject) => {
-      let result = await db.get().collection(collection.ADMIN_QUESTION_COLLECTION).find({ _category_id: CateId,typeOfQst:type }).toArray()
+      let result = await db.get().collection(collection.CATEGORY_COLLECTION).find().toArray()
       resolve(result)
     })
   },
-  getQuestionForAttenOne: (CateId) => {
+  getCollectionForUpdateOne: (CateId,collectionName) => {
     return new Promise(async (resolve, reject) => {
-      let result = await db.get().collection(collection.ADMIN_QUESTION_COLLECTION).findOne({ _id: objectId(CateId) }).then((response)=>{
+
+
+      // let result = await 
+      console.log(collectionName);
+      db.get().collection(`${collectionName}`).findOne({ _id: objectId(CateId) }).then((response)=>{
         resolve(response)
       })
     })
   },
 
-  addAnswerCollectionForUsers: (userID,score,qstn_id,type_answe,answer,typeOfQst) => {
+  addUsersDonation: (userID,data) => {
+    data.userID=userID
   
-    let obj 
-      if(type_answe==true){
-        obj =
-        {
-          userID,
-          score,
-          qstn_id,
-          typeOfQst,
-          answer,
-        }
-      }else{
-        obj =
-        {
-          userID,
-          score,
-          qstn_id,
-        }
-      }
-
     return new Promise(async (resolve, reject) => {
 
-            db.get().collection(collection.USER_ANSWER_COLLECTION).findOne({userID:userID,qstn_id:qstn_id}).then((response)=>{
-              if(response==null){
-                db.get().collection(collection.USER_ANSWER_COLLECTION).insertOne(obj).then((response)=>{
-                  resolve({status:true,message:'successfully inserted'})
-                })
-              }else{
-                reject({status:false,message:'error'})
-              }  
+            db.get().collection('user_donation_records').insertOne(data).then((response)=>{
+              resolve(true)
             })
     })
   },
+
+  addImageAndAddress: (data) => {
   
-  getScore: () => {
     return new Promise(async (resolve, reject) => {
-      // db.dummy.aggregate([{$group: {_id:null, sum_val:{$sum:"$price"}}}])
 
-      let data = await db.get().collection(collection.USER_ANSWER_COLLECTION).aggregate(
-        [
-          {
-            $group: {
-              _id:null,
-               total_score:{$sum:"$score"}
-            }
-          }
-        ]
-        ).toArray()
-        // console.log(data);
-        resolve(data)
+            db.get().collection('user_image_upload_collection').insertOne(data).then((response)=>{
+              resolve(response.insertedId)
+            })
+    })
+  },
+
+ // findOne({userID:userID,qstn_id:qstn_id}).then((response)=>{
+    //           if(response==null){
+    //             db.get().collection(collection.USER_ANSWER_COLLECTION)
+    //               resolve({status:true,message:'successfully inserted'})
+                // })
+    //           }else{
+    //             reject({status:false,message:'error'})
+    //           }  
+    //         })
+  // console.log(userID,data);
+    // let obj 
+    //   if(type_answe==true){
+    //     obj =
+    //     {
+    //       userID,
+    //       score,
+    //       qstn_id,
+    //       typeOfQst,
+    //       answer,
+    //     }
+    //   }else{
+        // obj =
+        // {
+        //   userID,
+        //   score,
+        //   qstn_id,
+        // }
+      // }
+
+  
+  // getScore: () => {
+  //   return new Promise(async (resolve, reject) => {
+  //     // db.dummy.aggregate([{$group: {_id:null, sum_val:{$sum:"$price"}}}])
+
+  //     let data = await db.get().collection(collection.USER_ANSWER_COLLECTION).aggregate(
+  //       [
+  //         {
+  //           $group: {
+  //             _id:null,
+  //              total_score:{$sum:"$score"}
+  //           }
+  //         }
+  //       ]
+  //       ).toArray()
+  //       // console.log(data);
+  //       resolve(data)
      
-    })
-  },
+  //   })
+  // },
 
 
-  clearScore: (userID) => {
+  // clearScore: (userID) => {
+  //   return new Promise(async (resolve, reject) => {
+  //     let data = await db.get().collection(collection.USER_ANSWER_COLLECTION).deleteMany({userID:userID})
+  //   resolve(true)
+  //   })
+  // },
+
+
+
+  AllDonationCatagories: () => {
     return new Promise(async (resolve, reject) => {
-      let data = await db.get().collection(collection.USER_ANSWER_COLLECTION).deleteMany({userID:userID})
-    resolve(true)
-    })
-  },
-
-
-
-  AllCatagories: () => {
-    return new Promise(async (resolve, reject) => {
-      let data = await db.get().collection(collection.CATEGORY_COLLECTION).find().toArray()
+      let data = await db.get().collection(collection.DONATION_CATEGORY_COLLECTION).find().toArray()
       if(data.length>0){
         resolve({status:true,data})
       }else{
@@ -153,12 +174,14 @@ module.exports = {
       }
     })
   },
-  getSubCategory: (CateId) => {
-    return new Promise(async (resolve, reject) => {
-      let result = await db.get().collection(collection).find({ category: objectId(CateId) }).toArray()
-      resolve(result)
-    })
-  },
+  // getSubCategory: (CateId) => {
+  //   return new Promise(async (resolve, reject) => {
+  //     let result = await db.get().collection(collection).find({ category: objectId(CateId) }).toArray()
+  //     resolve(result)
+  //   })
+  // },
+  
+  
   
 }
 

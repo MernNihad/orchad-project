@@ -1,0 +1,18 @@
+<section id="home-section" style="">
+  {{!-- <div class="container" id="container"> --}}
+    <div class="row home-row ml-1" id="results">
+      {{#if response}}
+      {{#each response}}
+   
+   <div class="" onclick="url('/getCollection/orphanage/{{this._id}}')" style="">
+       <div class="card m-1" style="width: 22rem;">
+        <img class="card-img-top" style="height: 235px;" src="/category-images/{{this._id}}.jpg" alt="Card image cap" />
+        <h5 style="text-align: center;margin-top:1rem">{{this.name}}</h5>
+      </div>
+   </div>
+   {{/each}}
+   {{else}}
+   <h3>loading...</h3>
+   {{/if}}
+    </div>
+    </section>

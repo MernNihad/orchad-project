@@ -328,6 +328,34 @@ function deleteQstn(id, name) {
 
 
 
+// function getCollections(id,url) {
+//   // let cfm = confirm("Are your id " + id);
+//   // if (cfm) {
+//     $.ajax({
+//       url: `${url}/${id}`,
+//       method: "get",
+//       data: {
+//         // id:'hy',
+//         // donationCollectionID : id
+//       },
+//       success: (response) => {
+//         if (response.status) {
+//             location.reload();
+//         } else {
+//           alert('occurs  error, try again')
+//           location.reload();
+//           // location.reload();
+//         }
+//       },
+//     });
+//   // }
+// }
+
+
+const url = (url)=>{
+  window.location.href=url
+}
+
 
 const get =(route)=>{
   window.location.href=route

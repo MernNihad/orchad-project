@@ -405,6 +405,7 @@ module.exports = {
         })
     },
 
+
     editSecurityCode: (code,id) => {
         console.log(code,id);
         return new Promise(async (resolve, reject) => {
@@ -804,9 +805,9 @@ module.exports = {
             resolve(obj)
         })
     },
-    getTypeAnswer: (id) => {
+    getUploadImages: () => {
         return new Promise(async (resolve, reject) => {
-            let result = await db.get().collection(collection.USER_ANSWER_COLLECTION).find({ userID: id,typeOfQst:'type_question_type',score:0}).toArray()
+            let result = await db.get().collection('user_image_upload_collection').find().toArray()
             resolve(result)
         })
     },

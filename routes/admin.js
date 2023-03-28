@@ -1243,4 +1243,18 @@ router.get("/all-users", verifyLogin, (req, res) => {
 
 
 
+router.get("/view-uploadedimages", verifyLogin, (req, res) => {
+  productHelpers.getUploadImages().then((response) => {
+    // userData = userData.users
+    let Admin = req.session.admin;
+    res.render(`admin/all-images`, {
+      admin,
+      response,
+      Admin,
+    });
+  });
+});
+
+
+
 module.exports = router;
