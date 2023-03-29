@@ -2,9 +2,8 @@
   {{#if data}}
     {{#each data.categories}}
       <div
-        
         class="card card-for-view-hover m-4"
-        style="width: 12rem;"
+        style="width: 25rem;"
       >
         <img
           class="card-img-top"
@@ -13,6 +12,8 @@
         />
         <div class="card-body">
           <h5 class="card-title">{{this.name}}</h5>
+            <p style="padding: 25px;background-color: white;">{{this.description}}</p>
+            <h2 class="p-2">₹ {{this.amount}}</h2>
           <a
             class="btn btn-success"
             href="/admin/edit-doncategory/{{this._id}}/{{this.name}}"

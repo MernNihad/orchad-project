@@ -13,10 +13,14 @@
   {{/if}}
 
   <form
+  s
     action="/uploadimage"
     enctype="multipart/form-data"
     method="post"
-    style="text-align: center;"
+    style="text-align: center;
+    
+    background-color: #ebebeb;
+    padding: 40px;"
     id="uploadimag"
   >
     <div class="">
@@ -24,6 +28,8 @@
     </div>
     <div class="">
       <img
+      style="
+      background-color: white;"
         class="m-4"
         src=""
         alt=""
@@ -43,7 +49,16 @@
       ></textarea>
     </div>
     <div class="">
-      <input type="submit" value="Submit" />
+      <input
+      style="
+          background-color: #100f0fe0;
+    border: 1px solid #181717;
+    padding: 8px 35px;
+    border-radius: 4px;
+    color: white;
+    width: 230px;
+    margin-top: 10px;
+      " type="submit" value="Submit" />
     </div>
   </form>
 

@@ -159,22 +159,26 @@ router.get('/getCollection/:url_end/:id', (req, res) => {
   console.log(req.params.url_end);
 })
 // -----------
-router.get('/donationForm', verifyLogin, (req, res) => {
+router.get('/donationForm/:id', verifyLogin, (req, res) => {
   res.render('user/donationForm', {
     user_header,
+    id:req.params.id,
     userData: req.session.user,
     MESSAGE:req.session.MESSAGE
   })
+  req.session.ID_FOR_DONATION_FORM = req.params.id
   req.session.MESSAGE = null
 })
 
-router.post('/donationForm', verifyLogin, (req, res) => {
-  userHelpers.addUsersDonation(req.session.user._id,req.body).then((response)=>{
+router.post('/donationForm', verifyLogin,async (req, res) => {
+  console.log(req.body);
+  let result = await userHelpers.getAmount(req.body.userID)
+  userHelpers.addUsersDonation(req.session.user._id,req.body,req.session.ID_FOR_DONATION_FORM,result).then((response)=>{
     req.session.MESSAGE = {
       message:'inserted',
       status:true
     }
-      res.redirect('/donationForm')
+      res.redirect(`/donationForm/${req.session.ID_FOR_DONATION_FORM}`)
   })
 })
 

@@ -1,8 +1,8 @@
-<section style="margin-top: 1.5rem;">
-  <img style="width: 100%;height: fit-content;" src="https://www.needforgoodfoundation.com/wp-content/uploads/2021/08/ngo-1366x630.jpg" alt="">
+<section class="" style="margin-top: 1.5rem;">
+  <img class="" style="width: 100%;height: fit-content;" src="https://www.needforgoodfoundation.com/wp-content/uploads/2021/08/ngo-1366x630.jpg" alt="">
 </section>
 
-<section style="background-color: #f1f1f1;">
+<section class="mb-5" style="background-color: #f1f1f1;">
 
 <div class="container" style="padding-top: 2rem;">
     <h2 style="" class="pb-5">Our Programms</h2>
@@ -11,7 +11,8 @@
       {{#each response.data}}
     <div onclick="url('/getCollection/donation/{{this._id}}')" class="m-1" style="position: relative;">
       <img src="/category-images/{{this._id}}.jpg" style="height: 230px;width: 350px;" alt="">
-      <h3 style="position: absolute;/* top: 26px; */bottom: 0px;color: white;font-weight: 700;width: 100%;text-align: center;">{{this.name}}</h3>
+      <h5 style="position: absolute;/* top: 26px; */bottom: 0px;color: rgb(43, 40, 40);font-weight: 700;width: 100%;text-align: center; text-shadow: 0px 1px black;background-color: white;
+    padding: 10px;">{{this.name}}</h5>
     </div>
     {{/each}}
       {{else}}

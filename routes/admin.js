@@ -59,7 +59,13 @@ router.get("/view-teacher", verifyLogin,(req, res) => {
   })
 });
 
-
+// router.get("/view-donations", verifyLogin,(req, res) => {
+//   // res.render(`${variable.admin_router}/viewDonations`,
+//   //   {
+//   //     admin,
+//   //   })
+//   productHelpers.getUserDetails()
+// });
 
 router.get("/add-teacher", verifyLogin,(req, res) => {
   res.render(`${variable.admin_router}/addTeacher`,
@@ -116,6 +122,17 @@ router.get("/all-users", verifyLogin, (req, res) => {
 // -------------------------------------
 
 
+router.get("/getUsersDonation/:id", verifyLogin, (req, res) => {
+  productHelpers.getUsersDonation(req.params.id).then((userData) => {
+    console.log(userData);
+    let Admin = req.session.admin;
+    res.render(`${variable.admin_router}/viewMore`, {
+      admin,
+      userData,
+      Admin,
+    });
+  });
+});
 
 
 

@@ -84,6 +84,14 @@ module.exports = {
             resolve(obj)
         })
     },
+    getUsersDonation: (id) => {
+        return new Promise(async (resolve, reject) => {
+            let categories = await db.get().collection('user_donation_records').find({userID:id}).toArray()
+            console.log(categories);
+            resolve(categories)
+        })
+    },
+    
 
     
 
@@ -679,7 +687,7 @@ module.exports = {
                     password: data.password,
                     date: dateTime,
                 }
-                obj.password = await bcrypt.hash(obj.password, 10);
+                // obj.password = await bcrypt.hash(obj.password, 10);
                 db.get().collection(collection.ADMIN_COLLECTION).updateOne({ _id: objectId(id) }, {
                     $set: {
                         email: obj.email,
@@ -688,6 +696,7 @@ module.exports = {
                     }
                 }).then(async (response) => {
                     let admin = await db.get().collection(collection.ADMIN_COLLECTION).findOne({ _id: objectId(id) })
+                    console.log(admin);
                     admin._id = admin._id.toString()
                     object = {
                         admin,

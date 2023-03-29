@@ -6,6 +6,7 @@ const { response, request } = require("express");
 const { PRODUCT_COLLECTION } = require("../config/collections");
 const variables = require("../config/variables");
 const collections = require("../config/collections");
+const { ObjectID } = require("bson");
 module.exports = {
   doSignup: (userData) => {
     return new Promise(async (resolve, reject) => {
@@ -71,6 +72,19 @@ module.exports = {
       resolve(result)
     })
   },
+  getAmount: (id) => {
+    return new Promise(async (resolve, reject) => {
+      let result = await db.get().collection(collection.DONATION_CATEGORY_COLLECTION).findOne({_id:objectId(id)})
+      if(result.amount){
+
+        resolve(result.amount)
+      }else{
+        
+      resolve(true)
+      }
+    })
+  },
+  
   getCollectionForUpdateOne: (CateId,collectionName) => {
     return new Promise(async (resolve, reject) => {
 
@@ -83,8 +97,10 @@ module.exports = {
     })
   },
 
-  addUsersDonation: (userID,data) => {
+  addUsersDonation: (userID,data,donation_collection_id,amount) => {
     data.userID=userID
+    data.donation_collection_id=donation_collection_id
+    data.amount=amount
   
     return new Promise(async (resolve, reject) => {
 

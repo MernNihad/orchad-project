@@ -1,27 +1,13 @@
 <div class="row ml-1">
   {{#if Categories}}
     {{#each Categories}}
-      <div
-        onclick="viewDisplay('/admin/subcategoryVIew/{{this._id}}/{{this.name}}')"
-        class="card card-for-view-hover m-4"
-        style="width: 12rem;"
-      >
-        <img
-          class="card-img-top"
-          src="/category-images/{{this._id}}.jpg"
-          alt="Card image cap"
-        />
+      <div class="card card-for-view-hover m-4" style="width: 30rem;">
+        <img class="card-img-top" src="/category-images/{{this._id}}.jpg" alt="Card image cap" />
         <div class="card-body">
           <h5 class="card-title">{{this.name}}</h5>
-          <a
-            class="btn btn-success"
-            href="/admin/edit-category/{{this._id}}/{{this.name}}"
-          >Edit</a>
-          <a
-            href="#"
-            class="btn btn-danger"
-            onclick="deleteCat('{{this._id}}',',{{this.name}}')"
-          >Delete</a>
+            <p style="padding: 25px;background-color: white;">{{this.description}}</p>
+          <a class="btn btn-success" href="/admin/edit-category/{{this._id}}/{{this.name}}">Edit</a>
+          <a href="#" class="btn btn-danger" onclick="deleteCat('{{this._id}}',',{{this.name}}')">Delete</a>
         </div>
       </div>
     {{/each}}

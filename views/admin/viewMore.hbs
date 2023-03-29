@@ -1,20 +1,8 @@
 <div class="question-body mt-5">
 
-  {{#if MESSAGE}}
-    {{#if MESSAGE.status}}
-      <div class="alert alert-success" role="alert">
-        {{MESSAGE.message}}
-      </div>
-    {{else}}
-      <div class="alert alert-danger" role="alert">
-        {{MESSAGE.message}}
-      </div>
-    {{/if}}
-  {{/if}}
-
-  {{#if response}}
-    {{#each response}}
-  <form action="/admin/checkTypeQstnAnswer" method="post" >
+  {{#if userData}}
+    
+  {{!-- <form action="/admin/checkTypeQstnAnswer" method="post" >
     <div class="question-body-firstDiv">
     </div>
     <div class="question-body-secondDiv">
@@ -49,8 +37,19 @@
         <input type="submit" value="Submit" />
       </div>
     </div>
-  </form>
-  {{/each}}
+  </form> --}}
+  
+   {{#each userData}}
+     <div style="margin: 15px; padding: 25px;background-color: #f1e8e8;">
+          <p>First Name :{{this.fname}}</p>
+          <p>Last Name : {{this.lname}}</p>
+          <p>Mobile Nmuber :{{this.phone}}</p>
+          <p>Email : {{this.email}}</p>
+          <p>Address : {{this.address}}</p>
+          <p>State : {{this.state}}</p>
+          <p>Amount : {{this.amount}}</p>
+     </div>
+     {{/each}}
   {{else}}
   <h1>!</h1>
   {{/if}}

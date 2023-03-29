@@ -53,12 +53,13 @@
       name="state"
       placeholder="State"
     />
-    <input class="input-donation-form" type="text" name="userID" hidden />
+    <input class="input-donation-form" type="text" name="userID" hidden value="{{id}}" />
     <input
-      class="mt-3 input-donation-submit-form"
+      class="mt-1 input-donation-submit-form"
       type="submit"
-      value="submit"
+      value="Submit"
     />
+  
   </form>
 </div>
 
@@ -67,6 +68,7 @@
 
 <style>
   .input-donation-form{ text-align: center; padding: 9px; margin: 5px; }
-  .input-donation-submit-form{ padding: 8px 60px; color: black; font-size: 19px;
-  border: 1px solid #000000cf; border-radius: 4px; }
+  .input-donation-submit-form{ padding: 8px 60px; color: white; font-size: 19px;
+  border: 1px solid #000000cf; border-radius: 4px;width: 230px;
+    background-color: black; }
 </style>
