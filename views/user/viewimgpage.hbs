@@ -1,27 +1,50 @@
-<h1>addd image</h1>
+<section class="mt-5">
 
-{{#if MESSAGE }}
-                        {{#if MESSAGE.status}}
-                        <div class="alert alert-success" role="alert">
-                            {{MESSAGE.message}}
-                        </div>
-                        {{else}}
-                            <div class="alert alert-danger" role="alert">
-                                {{MESSAGE.message}}
-                            </div>
-                        {{/if}}
-                        {{/if}}
+  {{#if MESSAGE}}
+    {{#if MESSAGE.status}}
+      <div class="alert alert-success" role="alert">
+        {{MESSAGE.message}}
+      </div>
+    {{else}}
+      <div class="alert alert-danger" role="alert">
+        {{MESSAGE.message}}
+      </div>
+    {{/if}}
+  {{/if}}
 
+  <form
+    action="/uploadimage"
+    enctype="multipart/form-data"
+    method="post"
+    style="text-align: center;"
+    id="uploadimag"
+  >
+    <div class="">
+      <input onchange="viewImageSubCategory(event)" type="file" name="image" />
+    </div>
+    <div class="">
+      <img
+        class="m-4"
+        src=""
+        alt=""
+        width="300px"
+        height="190px"
+        id="imgViewSubCat"
+      />
+    </div>
+    <div class="">
+      <textarea
+        style="padding: 15px 0px 0px 15px;"
+        name="address"
+        id=""
+        cols="30"
+        rows="10"
+        placeholder="Address"
+      ></textarea>
+    </div>
+    <div class="">
+      <input type="submit" value="Submit" />
+    </div>
+  </form>
 
-
-
-<form action="/uploadimage" enctype="multipart/form-data" method="post" >
-
- <img class="m-4" src="" alt="" width="65px" height="50px" id="imgViewSubCat">
-<input onchange="viewImageSubCategory(event)" type="file" name="image" >
-
-                            
-
-<textarea name="address" id="" cols="30" rows="10" placeholder="address"></textarea>
-<input type="submit" value="Submit">
-</form>
+</section>

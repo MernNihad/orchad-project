@@ -1,6 +1,39 @@
-<h1>donation</h1>
-<form action="/donationForm" >
+<section style= "padding: 30px; background-color: #f1f1f1;    text-align: center;
+    margin-top: 6rem;">
+  <h2>Donation</h2>
+  <form style="
+  display: flex;
+    flex-direction: column;
+    /* width: 10px; */
+    align-items: center;" 
+  action="/donationForm">
+    <input
+    style="
+    margin: 12px;
+    text-align: center;
+    
+    padding: 8px;"
+      type="number"
+      value="{{response.amount}}"
+      readonly
+      placeholder="Amount"
+    />
+    <input style="
+  
+    background-color: white;
+    border: 1px solid #181717;
+    padding: 8px 35px;
+    border-radius: 4px;
+    margin-top: 12px;
 
-<input type="number" value="{{response.amount}}" readonly placeholder="Amount">
-<input type="submit" value="Submit">
-</form>
+    
+    " type="submit" value="Submit" />
+  </form>
+
+    <div class="" style="margin-top: 1rem;font-family: 'Avenir', sans-serif;">
+    
+    <br>
+      <p style="padding: 25px;background-color: white;"> {{response.description}}  </p>
+  </div>
+
+</section>

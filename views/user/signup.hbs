@@ -1,57 +1,96 @@
-<section>
-    {{#if EmailError}}
-    <div>
-        <div class="signup-emailErr text-center">
-            <p>{{EmailError}}</p>
-        </div>
-    </div>
-    {{/if}}
-</section>
-
 <div class="my-login-page">
-    <section class="h-100">
-        <div class="container main-container h-100">
-            <div class="row justify-content-center h-100">
-                <div class="card-wrapper">
-                    <div class="top-heading-main_div">
-                        <div class="p-3 top-heading-sub_div">
-                            <h3 class="top-heading" style="font-family: 'Avenir', sans-serif ;">Quiz App</h3>
-                        </div>
-                    </div>
-                    <div class="card fat">
-                        <div class="card-body">
-                            <h4 class="card-title text-decoration-underline" style="font-family: 'Avenir', sans-serif ;">Register</h4>
-                            <form action="signup" style="font-family: 'Avenir', sans-serif ;" method="post" id="signupForm" class="signup-form">
-                                <div class="form-group">
-                                    <label for="name">Full Name</label>
-                                    <input id="name" type="text" class="form-control" name="name">
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">E-Mail Only</label>
-                                    <input id="email" type="email" class="form-control" name="email">
-                                </div>
-                                <div class="form-group">
-                                    <label for="password">Password</label>
-                                    <input id="password" type="password" class="form-control" name="password" autocomplete="on">
-                                </div>
-                                  <div class="form-group">
-                                    <label for="address">Address</label>
-                                    <textarea class="form-control" name="address" placeholder="Address" id="address" cols="30" rows="10"></textarea>
-                                    
-                                </div>
-                                <div class="form-group m-0">
-                                    <button type="submit" class="btn btn-success btn-block">
-                                        Register
-                                    </button>
-                                </div>
-                                <div class="mt-4 text-center font-size-15">
-                                    Already have an account? <a href="/login" class="text-success">Login</a>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+  <section class="h-100">
+    <div class="container main-container h-100">
+      <div class="row justify-content-center h-100">
+        <div class="card-wrapper">
+          <div class="top-heading-main_div">
+            <div class="p-3 top-heading-sub_div">
+              <h3
+                class="top-heading"
+                style="font-family: 'Avenir', sans-serif ;"
+              >Orchard</h3>
             </div>
+          </div>
+          <div class="card fat">
+            <div class="card-body">
+              <h4
+                class="card-title text-decoration-underline"
+                style="font-family: 'Avenir', sans-serif ;"
+              >Register</h4>
+              <form
+                action="signup"
+                style="font-family: 'Avenir', sans-serif ;"
+                method="post"
+                id="signupForm"
+                class="signup-form"
+              >
+
+                {{#if EmailError}}
+                  <div>
+                    <div class="signup-emailErr text-center">
+                      <p>{{EmailError}}</p>
+                    </div>
+                  </div>
+                {{/if}}
+
+                <div class="form-group">
+                  <label for="name">Full Name</label>
+                  <input
+                    id="name"
+                    type="text"
+                    class="form-control"
+                    name="name"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="email">E-Mail Only</label>
+                  <input
+                    id="email"
+                    type="email"
+                    class="form-control"
+                    name="email"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <input
+                    id="password"
+                    type="password"
+                    class="form-control"
+                    name="password"
+                    autocomplete="on"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="address">Address</label>
+                  <textarea
+                    class="form-control"
+                    name="address"
+                    placeholder="Address"
+                    id="address"
+                    cols="30"
+                    rows="10"
+                  ></textarea>
+
+                </div>
+                <div class="form-group m-0">
+                  <button
+                    style="color: #000;background-color: #ffffff;border-color: #7a6d6d;"
+                    type="submit"
+                    class="btn btn-success btn-block"
+                  >
+                    Register
+                  </button>
+                </div>
+                <div class="mt-4 text-center font-size-15">
+                  Already have an account?
+                  <a href="/login" class="">Login</a>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 </div>

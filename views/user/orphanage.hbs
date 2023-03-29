@@ -1,10 +1,18 @@
 
-{{#if response}}
+<div class="container mt-5">
+    {{#if response}}
 
-<div class="container">
-    <h2>{{response.name}}</h2>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe doloribus aliquam, dolores ducimus omnis, dolore necessitatibus possimus voluptate ipsa et itaque! Sequi deserunt, autem tempora consequatur officia praesentium vero veniam?</p>
-    <img src="/category-images/{{response._id}}.jpg" alt="">
-    <a href="">{{response.contact}}</a>
+<div class="container text-center">
+    <h2 class="text-center">{{response.name}}</h2>
+    
+
+
+    
+      <p style="padding: 25px;background-color: white;">{{response.description}} </p>
+  
+
+    <img class="" style="width: 320px;" src="/category-images/{{response._id}}.jpg" alt="">
+   <p style="color: blue;margin-top: 1rem;" href=""><span style="color:black;font-size:1.1rem   ">Contact :</span> {{response.contact}}</p>
 </div>
 {{/if}}
+</div>

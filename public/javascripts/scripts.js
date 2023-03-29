@@ -32,18 +32,16 @@ $(document).ready(function () {
         required: true,
         minlength: 6,
       },
-      //   confirm_password: {
-      //       required: true,
-      //       minlength: 6,
-      //       equalTo: "#password"
-      //   },
+      
       email: {
         required: true,
         email: true,
       },
-      // agree: {
-      //   required: true,
-      // },
+      address:{
+        required:true,
+
+      }
+
     },
     messages: {
       name: {
@@ -64,10 +62,48 @@ $(document).ready(function () {
       email: {
         required: "Enter your Email",
       },
+      address:{
+        required:'Address field is null'
+      }
       // agree: {
       //   required: "You must agree with our Terms and Conditions",
       // },
     },
+  });
+
+
+  $("#uploadimag").validate({
+    rules: {
+      address: {
+        required: true,
+      },
+      image: {
+        required: true,
+      }
+    }
+  });
+
+  $("#donationDetails").validate({
+    rules: {
+      fname: {
+        required: true,
+      },
+      lname: {
+        required: true,
+      },
+      phone: {
+        required: true,
+      },
+      email: {
+        required: true,
+      },
+      address: {
+        required: true,
+      },
+      state: {
+        required: true,
+      },
+    }
   });
 
 
