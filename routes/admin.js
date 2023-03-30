@@ -277,6 +277,18 @@ router.post("/edit-security-code",verifyLogin, (req, res) => {
   })
 });
 
+router.get("/view-profile", verifyLogin,(req, res) => {
+  productHelpers.getSecurityCode().then((response) => {
+    res.render(`${variable.admin_router}/viewSecurityCode`, {
+      admin,
+      Admin: req.session.admin,
+      MESSAGE: req.session.MESSAGE,
+      response
+    })
+    req.session.MESSAGE = null
+  })
+});
+
 router.get("/view-security-code", verifyLogin,(req, res) => {
   productHelpers.getSecurityCode().then((response) => {
     res.render(`${variable.admin_router}/viewSecurityCode`, {
